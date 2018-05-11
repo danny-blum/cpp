@@ -3,9 +3,12 @@ public:
     
     bool byte_valid(const string &s)
     {
-        int byte_int = std::stoi(s);
-        if (byte_int <= 255)
-            return true;
+        if (s.length()==1 || s[0]!='0')
+        {
+            int byte_int = std::stoi(s);
+            if (byte_int <= 255)
+                return true;
+        }
         
         return false;
     }
