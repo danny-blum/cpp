@@ -11,21 +11,25 @@ public:
     ListNode* swapPairs(ListNode* head) {
         if (!head || !head->next) return head;
         ListNode *pl1 = head;
-        ListNode *pl2 = head->next;
-        ListNode *plh = NULL;
-        ListNode **ppl = &plh;
+        ListNode *tmp;
+        ListNode *plh = pl1->next;
+        ListNode *prev = NULL;
         
-        while (pl1 && pl2)
+        while (pl1->next->next)
         {
-            pl1->next = pl2->next;
-            pl2->next = pl1;
-            *ppl = pl2;
-            ppl = &(pl1->next);
+            tmp = pl1->next;
+            pl1->next = pl1->next->next;
+            tmp->next = pl1;
+            if (prev) prev->next = tmp;
+            prev = pl1;
             pl1 = pl1->next;
-            if (pl1)
-                pl2 = pl1->next;
-            else
-                pl2 = NULL;
+            if (!pl1->next) break;
+        }
+        if (pl1->next)
+        {
+            if (prev) prev->next = pl1->next;
+            pl1->next->next = pl1;
+            pl1->next = NULL;
         }
         
         return plh;
