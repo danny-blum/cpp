@@ -34,7 +34,7 @@ public:
         }
         
         // Search for end of range
-        low = 0;
+        low = mid;
         high = nums.size()-1;
         while (low <= high)
         {
