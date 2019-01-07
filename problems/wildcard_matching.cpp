@@ -14,14 +14,8 @@ public:
         {
             if (si == s.length())
             {
-                if (p[pi] == '*')
-                {
-                    while (pi<(p.length()-1) && p[pi+1]=='*')
-                        pi++;
-                    
-                    if (pi==(p.length()-1) && p[pi]=='*')
-                        return true;
-                }
+                while (p[pi]=='*') pi++;
+                if (pi == p.length()) return true;
                 
                 return false;
             }
@@ -32,7 +26,7 @@ public:
             }
             else if (p[pi] == '*')
             {
-                while (pi<(p.length()-1) && p[pi+1]=='*')
+                while (p[pi+1]=='*')
                     pi++;
                 if (pi == (p.length()-1))
                     return true;
@@ -43,6 +37,7 @@ public:
                     si++;
                 }
 
+                // record backtrack position
                 if (si < s.length()-1)
                 {
                     wild = true;
