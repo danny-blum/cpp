@@ -12,34 +12,33 @@ public:
         }
         
         for (int i=0; i<heights.size(); ++i) {
-/*
-            if (m.find(heights[i]) == m.end()) {
-                auto p = m.insert({heights[i], make_pair(0, 0)});
-                mit = p.first;
-
-                //  need to inherit from next highest......
-                map<int, pair<int,int>>::iterator mit_next = std::next(mit);
-
-                if (mit_next != m.end()) {
-                    mit->second.first = mit_next->second.first;
-                    mit->second.second = mit_next->second.second;
-                }
-            }
-*/
+            int old_cur = 0;
             
-            for(mit=m.begin(); mit!=m.end(); ++mit) {
-                if (mit->first <= heights[i]) {
-                    int cur = ++mit->second.first;
-                    if (cur > mit->second.second) {
-                        mit->second.second = cur;
-                    }
-                }
-                else if (mit->first <= prev_height)
+            if (heights[i] >= prev_height)
+                mit = m.find(heights[i]);
+            else {
+                mit = m.find(prev_height);
+                for (mit; mit->first > heights[i]; --mit) {
+                    old_cur += mit->second.first;
+                    if (old_cur > mit->second.second)
+                        mit->second.second = old_cur;
                     mit->second.first = 0;
-                else
-                    break;
+                }
             }
+            mit->second.first += (old_cur + 1);
+            if (mit->second.first > mit->second.second)
+                mit->second.second = mit->second.first;
+
             prev_height = heights[i];
+        }
+        
+        // reconcile final cur and max values
+        map<int, pair<int,int>>::reverse_iterator rmit = m.rbegin();
+        int final_cur = 0;
+        for (rmit; rmit != m.rend(); ++rmit) {
+            final_cur += rmit->second.first;
+            if (final_cur > rmit->second.second)
+                rmit->second.second = final_cur;
         }
         
         int area;
