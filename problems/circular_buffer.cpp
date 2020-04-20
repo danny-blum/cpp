@@ -27,7 +27,7 @@ public:
   int write(int len, Iter it_in) {
     int write_len = std::min(len, size_ - len_);
   
-    int end = start_ + len_;
+    int end = (start_ + len_) % size_;
     int first_len = std::min(write_len, size_ - end); 
     std::copy_n(it_in, first_len, buf_.begin()+end);
   
