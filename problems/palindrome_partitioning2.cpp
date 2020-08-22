@@ -6,51 +6,22 @@ public:
             return 0;
         
         vector<vector<bool>> isPal(len, vector<bool>(len, false));
+        vector<int> vcuts(len, 0);
         
-        return subPartition(s, 0, isPal);
-    }
-    
-private:
-    bool isPalindrome(string &s, int start, int end, vector<vector<bool>> &isPal) {
-        int sublen = (end-start) + 1;
-        
-        if (s[start] != s[end])
-            return false;
-        
-        if (sublen>2 || !isPal[start+1][end-1])
+        for (int i=0; i<len; ++i)
         {
-            for (int i=1; i<sublen/2; ++i)
+            int min = i;
+            for (int j=0; j<=i; ++j)
             {
-                if (s[start+i] != s[end-i])
-                    return false;
-            }
-        }
-        
-        isPal[start][end] = true;
-        return true;
-    }
-    
-    int subPartition(string &s, int start, vector<vector<bool>> &isPal) {
-        int len = s.length();
-        int minCuts = INT_MAX;
-        
-        for (int end=start; end<len; ++end)
-        {
-            if (start==end || isPalindrome(s, start, end, isPal))
-            {
-                if (end == len-1)
+                if (s[j]==s[i] && ((i-1<j+1) || isPal[j+1][i-1]))
                 {
-                    return 0;
-                }
-                else
-                {
-                    int curCuts = subPartition(s, end+1, isPal) + 1;
-                    if (curCuts < minCuts)
-                        minCuts = curCuts;
+                    isPal[j][i] = true;
+                    min = (j==0) ? 0 : std::min(min, vcuts[j-1]+1);
                 }
             }
+            vcuts[i] = min;
         }
         
-        return minCuts;
-    }    
+        return vcuts[len-1];
+    }  
 };
